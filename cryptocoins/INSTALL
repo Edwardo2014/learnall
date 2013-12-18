@@ -1,0 +1,55 @@
+Build cryptocoin wallets
+
+#Dependencies:
+  $ aptitude install build-essential libssl-dev libdb4.8-dev libdb4.8++-dev libboost-all-dev
+#Downloads:
+  $ wget https://litecoin.org/downloads/linux/litecoin-0.8.5.1-linux.tar.xz
+  $ wget http://downloads.sourceforge.net/project/bitcoin/Bitcoin/bitcoin-0.8.5/bitcoin-0.8.5-linux.tar.gz?r=http%3A%2F%2Fbitcoin.org%2Fen%2Fdownload&ts=1382539324&use_mirror=netcologne
+  $ wget https://github.com/FeatherCoin/FeatherCoin/archive/master.zip
+  $ wget https://github.com/namecoinq/namecoinq/archive/master.zip
+  $ wget https://github.com/CryptoManiac/novacoin/archive/master.zip
+
+  $ wget http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz
+
+  $ tar -xJf 
+  $ tar -xzf
+
+#Building libdb4.8:
+  $ cd build_unix/
+  $ ../dist/configure --prefix=$HOME/.local --enable-cxx
+  $ make install
+
+#Build clients:
+
+Build with (Building with -j option cousing gcc error!):
+  $ cd src/
+  $ make -f makefile.unix USE_UPNP= BDB_INCLUDE_PATH=$HOME/.local/include BDB_LIB_PATH=$HOME/.local/lib/
+
+For Namecoin add include and libs paths in Makefile:
+----------------------------------------------------------------------------
+INCLUDEPATHS= \
+        -I../libs/openssl-1.0.1e/include \
+        -I../libs/db-4.7.25.NC/build_unix \
+        -I../libs/boost_1_50_0 \
+        -I/home/user/.local/include
+LIBPATHS= \
+        -L../libs/openssl-1.0.1e \
+        -L../libs/db-4.7.25.NC/build_unix \
+        -L../libs/boost_1_50_0/stage/lib \
+        -L/home/user/.local/lib
+----------------------------------------------------------------------------
+# Run client with --daemon option and set conf files, then chmod 700 all conf files
+
+
+#In namecoin conf file must add:
+proxy=127.0.0.1:9050
+
+file to start all daemons run-deamons.sh:
+----------------------------------------------------------------------------
+#!/bin/bash
+export LD_LIBRARY_PATH=/home/odin/.local/lib
+ionice -c3 bitcoind --daemon -proxy=127.0.0.1:9050
+ionice -c3 litecoind --daemon -proxy=127.0.0.1:9050
+ionice -c3 feathercoind --daemon -proxy=127.0.0.1:9050
+ionice -c3 nohup namecoind & #old version of bitcoin client (proxy set in conf file)
+----------------------------------------------------------------------------
