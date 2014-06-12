@@ -53,3 +53,6 @@ ionice -c3 litecoind --daemon -proxy=127.0.0.1:9050
 ionice -c3 feathercoind --daemon -proxy=127.0.0.1:9050
 ionice -c3 nohup namecoind & #old version of bitcoin client (proxy set in conf file)
 ----------------------------------------------------------------------------
+
+
+test
